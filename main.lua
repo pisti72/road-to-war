@@ -38,6 +38,8 @@ function love.keypressed(key, scancode, isrepeat)
    if key == "escape" then
       print("Bye!")
       love.event.quit()
+   elseif key == "d" then
+      printMap(1)
    elseif key == "f" then
       --success = love.graphics.toggleFullscreen( )
    end   
