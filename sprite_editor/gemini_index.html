@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Saját Pixel Rajzoló</title>
+    <style>
+        body {
+            background-color: #222;
+            color: white;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* A rajztábla kerete és rácsa */
+        #canvas {
+            display: grid;
+            grid-template-columns: repeat(16, 25px);
+            grid-template-rows: repeat(16, 25px);
+            gap: 1px;
+            background-color: #444;
+            padding: 5px;
+            border-radius: 4px;
+        }
+
+        /* Az egyes pixelek stílusa */
+        .pixel {
+            width: 25px;
+            height: 25px;
+            background-color: #ffffff; /* Alapból fehér minden pixel */
+            cursor: crosshair;
+        }
+
+        .info {
+            margin-bottom: 15px;
+        }
+        
+        #color-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            border: 1px solid white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="info">
+        Aktuális szín: <div id="color-indicator" style="background-color: #ff0000;"></div> 
+        (Bal klikk: rajzol | Jobb klikk: színfelvétel)
+    </div>
+
+    <div id="canvas"></div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const colorIndicator = document.getElementById('color-indicator');
+        
+        // Ez a változó tárolja az éppen kiválasztott színt (alapból piros)
+        let currentColor = '#ff0000'; 
+        
+        // Egy 16x16-os táblát generálunk (256 pixel)
+        const gridSize = 16 * 16;
+
+        for (let i = 0; i < gridSize; i++) {
+            const pixel = document.createElement('div');
+            pixel.classList.add('pixel');
+
+            // 1. BAL KLIKK: Rajzolás az aktuális színnel
+            pixel.addEventListener('click', function() {
+                pixel.style.backgroundColor = currentColor;
+            });
+
+            // 2. JOBB KLIKK: Szín felvétele (Pipetta funkció)
+            pixel.addEventListener('contextmenu', function(e) {
+                e.preventDefault(); // Megakadályozza, hogy megnyíljon a böngésző jobb klikkes menüje
+                
+                // Lekérjük a pixel aktuális háttérszínét
+                const pickedColor = pixel.style.backgroundColor;
+                
+                // Átállítjuk a saját "ecsetünket" erre a színre
+                currentColor = pickedColor;
+                colorIndicator.style.backgroundColor = pickedColor;
+            });
+
+            canvas.appendChild(pixel);
+        }
+    </script>
+</body>
+</html>
